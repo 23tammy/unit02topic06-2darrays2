@@ -1,3 +1,5 @@
+import javax.swing.plaf.synth.SynthStyleFactory;
+
 public class SelfAvoidingWalk {
     public static boolean oneWalk(int n) {
         boolean[][] grid = new boolean[n][n];
@@ -85,6 +87,7 @@ public class SelfAvoidingWalk {
             while(x >= 0 && x <n && y >=0 && y < n && grid[y][x] == false){//condition if path is out in bounds or hasnt run into itself
                 grid[y][x] = true; 
                 double r = Math.random();
+                System.out.println(x + " , " + y);
                 if (r < .25){//up
                     y--; // remember: (0,0) starts top left, oposite traversing 
                     if (y < y1){ //furthest up
@@ -110,6 +113,14 @@ public class SelfAvoidingWalk {
             if (!(x < 0 || x >= n || y < 0 || y >= n)){
                 nDeads++;
             }
+            System.out.println(nDeads);
+            System.out.println(x1);
+            System.out.println(x2);
+            System.out.println(y1);
+            System.out.println(y2);
+
+
+
         
         }
         
@@ -120,7 +131,7 @@ public class SelfAvoidingWalk {
 
     public static void main(String[] args) {
         int n = 5;
-        int nTrials = 1000000;
+        int nTrials = 1;
 
         //printPathLengths(n, nTrials);
         deadEndRectangleArea(n, nTrials);
