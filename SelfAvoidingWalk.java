@@ -1,140 +1,136 @@
-import javax.swing.plaf.synth.SynthStyleFactory;
-
 public class SelfAvoidingWalk {
     public static boolean oneWalk(int n) {
         boolean[][] grid = new boolean[n][n];
 
-            int x = n/2; //center starting position
-            int y = n/2;
-           
-            while(x >= 0 && x <n && y >=0 && y < n && grid[x][y] == false){//condition if path is out in bounds or hasnt run into itself
-                grid[x][y] = true; 
-               // pathLength++;
-                double r = Math.random();
-                if (r < .25){//up
-                    y--; // remember: (0,0) starts top left, oposite traversing 
-                }else if (r < .5) {//down
-                    y++;
-                }else if (r < .75) {//left
-                    x--;
-                }else{//right
-                    x++;
-                }
+        int x = n / 2; // center starting position
+        int y = n / 2;
+
+        while (x >= 0 && x < n && y >= 0 && y < n && grid[x][y] == false) {// condition if path is out in bounds or
+                                                                           // hasnt run into itself
+            grid[x][y] = true;
+            // pathLength++;
+            double r = Math.random();
+            if (r < .25) {// up
+                y--; // remember: (0,0) starts top left, oposite traversing
+            } else if (r < .5) {// down
+                y++;
+            } else if (r < .75) {// left
+                x--;
+            } else {// right
+                x++;
             }
-            if (x < 0 || x >= n || y < 0 || y >= n){//case escape
-                return true;
-            }else{ //case dead end
-                return false;
-            }
+        }
+        if (x < 0 || x >= n || y < 0 || y >= n) {// case escape
+            return true;
+        } else { // case dead end
+            return false;
+        }
     }
 
-    public static void printPathLengths(int n, int nTrials) { 
-        //print average length of paths 
-        //(seperate dead and escape)
-        //dead end probality
+    public static void printPathLengths(int n, int nTrials) {
+        // print average length of paths
+        // (seperate dead and escape)
+        // dead end probality
         int nDeads = 0;
         int sumEscapeLengths = 0;
         int sumDeadLengths = 0;
 
-        for(int trials = 0; trials < nTrials; trials++){
+        for (int trials = 0; trials < nTrials; trials++) {
             boolean[][] grid = new boolean[n][n];
 
-            int x = n/2; //center starting position
-            int y = n/2;
+            int x = n / 2; // center starting position
+            int y = n / 2;
             int pathLength = 0;
 
-            while(x >= 0 && x <n && y >=0 && y < n && grid[x][y] == false){//condition if path is out in bounds or hasnt run into itself
-                grid[x][y] = true; 
+            while (x >= 0 && x < n && y >= 0 && y < n && grid[x][y] == false) {// condition if path is out in bounds or
+                                                                               // hasnt run into itself
+                grid[x][y] = true;
                 pathLength++;
                 double r = Math.random();
-                if (r < .25){//up
-                    y--; // remember: (0,0) starts top left, oposite traversing 
-                }else if (r < .5) {//down
+                if (r < .25) {// up
+                    y--; // remember: (0,0) starts top left, oposite traversing
+                } else if (r < .5) {// down
                     y++;
-                }else if (r < .75) {//left
+                } else if (r < .75) {// left
                     x--;
-                }else{//right
+                } else {// right
                     x++;
                 }
             }
-            if (x < 0 || x >= n || y < 0 || y >= n){//case escape
+            if (x < 0 || x >= n || y < 0 || y >= n) {// case escape
                 sumEscapeLengths += pathLength;
-            }else{ //case dead end
+            } else { // case dead end
                 nDeads++;
                 sumDeadLengths += pathLength;
             }
         }
-        System.out.println("dead end probability: " + (double)nDeads/nTrials + "\naverage length of escape paths: " + ((double)sumEscapeLengths/nTrials) + "\naverage length of dead-end paths: " + ((double)sumDeadLengths/nTrials));
+        System.out.println("dead end probability: " + (double) nDeads / nTrials + "\naverage length of escape paths: "
+                + ((double) sumEscapeLengths / nTrials) + "\naverage length of dead-end paths: "
+                + ((double) sumDeadLengths / nTrials));
     }
 
-    public static void deadEndRectangleArea(int n, int nTrials) {
-        //take ntrials and nside; return avg area of each path
-        //find furthest right, left, up , and down values;;;keep track of coords
-        int nDeads = 0;
+    public static double deadEndRectangleArea(int n, int nTrials) {
+        // take ntrials and nside; return avg area of each path
+        // find furthest right, left, up , and down values;;;keep track of coords
+        int x1 = n / 2;
+        int x2 = n / 2;
+        int y1 = n / 2;
+        int y2 = n / 2;
 
-        int x1 = n;
-        int x2 = 0;
-        int y1 = n;
-        int y2 = 0;
+        int sumAreas = 0;
 
-
-        for(int trials = 0; trials < nTrials; trials++){
+        for (int trials = 0; trials < nTrials; trials++) {
             boolean[][] grid = new boolean[n][n];
 
-            int x = n/2; //center starting position
-            int y = n/2;
+            int x = n / 2; // center starting position
+            int y = n / 2;
 
-            while(x >= 0 && x <n && y >=0 && y < n && grid[y][x] == false){//condition if path is out in bounds or hasnt run into itself
-                grid[y][x] = true; 
-                double r = Math.random();
-                System.out.println(x + " , " + y);
-                if (r < .25){//up
-                    y--; // remember: (0,0) starts top left, oposite traversing 
-                    if (y < y1){ //furthest up
-                        y1 = y;
-                    }
-                }else if (r < .5) {//down
-                    y++;
-                    if (y > y2){//furthest down
-                        y2 = y;
-                    }
-                }else if (r < .75) {//left
-                    x--;
-                    if (x < x1){//furthest left
-                        x1 = x;
-                    }
-                }else{//right
-                    x++;
-                    if (x > x2){//furthest right
-                        x2 = x;
-                    }
+            while (x >= 0 && x < n && y >= 0 && y < n && grid[y][x] == false) {
+
+                if (x > x2) {// check furthest right
+                    x2 = x;
                 }
+                if (x < x1) {// check furthest left
+                    x1 = x;
+                }
+                if (y > y2) {// check furthest down
+                    y2 = y;
+                }
+                if (y < y1) { // check furthest up
+                    y1 = y;
+                }
+
+                grid[y][x] = true;
+                double r = Math.random();
+                if (r < .25) {// up
+                    y--; // remember: (0,0) starts top left, oposite traversing
+
+                } else if (r < .5) {// down
+                    y++;
+
+                } else if (r < .75) {// left
+                    x--;
+
+                } else {// right
+                    x++;
+
+                }
+
             }
-            if (!(x < 0 || x >= n || y < 0 || y >= n)){
-                nDeads++;
+            if (!(x < 0 || x >= n || y < 0 || y >= n)) { //case dead end
+                int area = ((Math.abs(x2 - x1) + 1) * (Math.abs(y2 - y1) + 1));
+                sumAreas += area;
             }
-            System.out.println(nDeads);
-            System.out.println(x1);
-            System.out.println(x2);
-            System.out.println(y1);
-            System.out.println(y2);
-
-
-
-        
         }
-        
+        return (sumAreas/nTrials);
     }
 
-
-    
-
     public static void main(String[] args) {
-        int n = 5;
-        int nTrials = 1;
+        int n = 50;
+        int nTrials = 1000;
 
-        //printPathLengths(n, nTrials);
-        deadEndRectangleArea(n, nTrials);
-        
+        // printPathLengths(n, nTrials);
+        System.out.println(deadEndRectangleArea(n, nTrials));
+
     }
 }
